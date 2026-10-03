@@ -1,0 +1,34 @@
+module bidirectional_buffer_tb;
+
+reg En;
+reg driveA, driveB;
+
+wire A, B;
+
+// Drive A only when En = 1
+assign A = (En) ? driveA : 1'bz;
+
+// Drive B only when En = 0
+assign B = (~En) ? driveB : 1'bz;
+
+bidirectional_buffer uut (
+    .En(En),
+    .A(A),
+    .B(B)
+);
+
+initial begin
+    En = 0; driveB = 1; #10;
+    En = 0; driveB = 0; #10;
+
+    En = 1; driveA = 0; #10;
+    En = 1; driveA = 1; #10;
+
+    $finish;
+end
+
+initial begin
+    $monitor("En=%b A=%b B=%b", En, A, B);
+end
+
+endmodule
