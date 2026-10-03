@@ -1,0 +1,35 @@
+module D_flipflop_tb();
+reg clk,reset,d;
+wire q,qb;
+parameter CYCLE=10;
+D_flipflop dut(.clk(clk),.reset(reset),.d(d),.q(q),.qb(qb));
+initial 
+clk=1'b0;
+always
+begin
+#(CYCLE/2);
+clk=~clk;
+end
+task rst_dut();
+begin 
+@(negedge clk)
+reset=1'b1;
+@(negedge clk)
+reset=1'b0;
+end
+endtask
+task din(input i);
+begin
+@(negedge clk);
+d=i;
+end
+endtask
+initial
+begin 
+$monitor("time=%0t clk=%b reset=%d d=%b qb=%b",$time,clk,reset,d,q,qb);
+end
+initial
+begin
+$fsdbDumpvars(0,dff_tb);
+end
+endmodule
