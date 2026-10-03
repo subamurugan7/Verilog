@@ -1,0 +1,54 @@
+module jk_flipflop_tb();
+reg clock,reset,j,k;
+wire q,qb;
+parameter HOLD=2'b00,
+          RESET=2'b01,
+	  SET=2'b10,
+	 TOGGLE=2'b11;
+parameter CYCLE=10;
+jk_flipflop UUT(clock,reset,j,k,q,qb);
+always
+      begin
+         #(CYCLE/2);
+         clock = 1'b0;
+         #(CYCLE/2);
+         clock=~clock;
+      end
+
+   //Reset task
+   task rst_dut();
+      begin
+         @(negedge clock);
+         reset=1'b1;
+         @(negedge clock);
+         reset=1'b0;
+      end
+   endtask
+  task initialize;
+  begin
+  {j,k}=0;
+  end
+  endtask
+  task task1;
+  input j_in,k_in;
+  begin
+  j=j_in;
+  k=k_in;
+  end
+  endtask
+  initial begin
+  initialize(); 
+  rst_dut();
+  task1(1'b0,1'b0);#10;
+  task1(1'b0,1'b1);#10;
+  task1(1'b1,1'b0);#10;
+  task1(1'b1,1'b1);#10;
+
+  $monitor("clock=%b reset=%b j=%b k=%b q=%b qb=%b",clock,reset,j,k,q,qb);
+#20 $finish;
+end
+initial
+    begin
+	 $fsdbDumpvars(0,jk_flipflop);
+    end
+endmodule

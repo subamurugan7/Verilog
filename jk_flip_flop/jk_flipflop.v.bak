@@ -1,0 +1,23 @@
+module jk_flipflop(
+   input clk,
+   input reset,
+   input j,k,
+   output  q,
+   output qb
+);
+parameter HOLD=2'b00;
+parameter RESET=2'b01;
+parameter SET=2'b10;
+parameter TOGGLE=2'b11;
+always@(negedge clk)
+begin
+case({j,k})
+HOLD:q<=q;
+RESET:q<=1'b0;
+SET:q<=1'b1;
+TOGGLE:q<=~q;
+default:q<=1;
+endcase
+assign qb=~q;
+end
+endmodule
