@@ -1,0 +1,21 @@
+module async_16x8_singleport_ram (
+    input        clk,
+    input        we,
+    input  [3:0] addr,
+    input  [7:0] din,
+    output [7:0] dout
+);
+
+    // 16 locations, each 8 bits
+    reg [7:0] mem [0:15];
+
+    // Synchronous Write
+    always @(posedge clk) begin
+        if (we)
+            mem[addr] <= din;
+    end
+
+    // Asynchronous Read
+    assign dout = mem[addr];
+
+endmodule
