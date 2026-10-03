@@ -1,0 +1,59 @@
+module syn4_loadcounter_tb;
+  reg clk;
+  reg reset;
+  reg load;
+  reg en;
+  reg [3:0] data_in;
+  wire [3:0] q;
+  wire  y;
+syn4_loadupcounter uut(.clk(clk),.reset(reset),.load(load),.en(en),.data_in(data_in),.q(q),.y(y));
+always begin
+  #5 clk=~clk;
+end
+initial begin
+ clk=0;
+ reset=0;
+ load=0;
+ en=0;
+ data_in=4'b0000;
+ $dumpfile("counter_simulation.vcd");
+ $dumpvars(0,syn4_loadcounter_tb);
+ $display("Time\t RST\t LOAD\t EN\t DATA_IN\t Q (Bin)\t Q (Dec)\t RCO");
+ $monitor("%0dt\t %b\t %b\t %b\t %b\t\t %b\t\t  %b", $time, reset, load, en, data_in,q,y);
+
+ #10;
+ reset=1;
+ #10;
+ reset=0;
+
+ #10;
+ en=1;
+ #50;
+ #10;
+ en=0;
+ #30;
+
+ #10;
+ data=4'b1100;
+ load=1;
+ #10;
+ load=0;
+ en=1;
+ #50
+
+ data=4'b1111;
+ load=1;
+ #10;
+ load=0;
+ en=1;
+ #20;
+
+$display("Simulation successfully complete.");
+$finish;
+end
+endmodule
+
+
+
+
+
