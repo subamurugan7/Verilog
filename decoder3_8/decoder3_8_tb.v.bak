@@ -1,0 +1,17 @@
+module decoder3_8_tb();
+reg [2:0]d;
+wire [7:0]y;
+integer i;
+decoder_3to8_dataflow uut(d,y);
+initial
+begin
+$display(" d | y");
+$monitor( " %b | %b ", d, y);
+for (i=0;i<8;i=i+1)
+begin
+{d[2],d[1],d[0]}=i;
+#10; 
+end
+$finish;
+end
+endmodule
